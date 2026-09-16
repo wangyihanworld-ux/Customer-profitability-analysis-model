@@ -18,6 +18,13 @@ class ProfitabilityModelTest(unittest.TestCase):
         result = analyze_profitability(self.dataset.transactions); total = result.metrics["contribution_profit"]; self.assertAlmostEqual(result.customer_summary["contribution_profit"].sum(), total); self.assertAlmostEqual(result.product_summary["contribution_profit"].sum(), total)
     def test_high_revenue_low_profit_customer_is_identified(self):
         flagged = analyze_profitability(self.dataset.transactions).customer_summary.query("profitability_flag == '高收入低利润'"); self.assertGreaterEqual(len(flagged), 1)
+    def test_profitability_threshold_is_configurable(self):
+        strict = analyze_profitability(self.dataset.transactions, low_margin_threshold=0.50)
+        default = analyze_profitability(self.dataset.transactions)
+        self.assertGreaterEqual((strict.customer_summary["profitability_flag"] == "高收入低利润").sum(), (default.customer_summary["profitability_flag"] == "高收入低利润").sum())
+    def test_invalid_profitability_threshold_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "阈值"):
+            analyze_profitability(self.dataset.transactions, low_margin_threshold=1.1)
     def test_hhi_is_bounded(self):
         hhi = analyze_profitability(self.dataset.transactions).metrics["revenue_hhi"]; self.assertGreater(hhi, 0); self.assertLessEqual(hhi, 1)
     def test_sensitivity_direction(self):

@@ -12,7 +12,17 @@ class ProfitabilityResult:
     monthly_summary: pd.DataFrame
     metrics: dict[str, float]
 
-def analyze_profitability(transactions: pd.DataFrame) -> ProfitabilityResult:
+def analyze_profitability(
+    transactions: pd.DataFrame,
+    *,
+    low_margin_threshold: float = 0.15,
+    high_value_threshold: float = 0.25,
+    top_revenue_count: int = 2,
+) -> ProfitabilityResult:
+    if not 0 <= low_margin_threshold <= 1 or not 0 <= high_value_threshold <= 1:
+        raise ValueError("利润率阈值必须在 0 到 1 之间")
+    if top_revenue_count < 1:
+        raise ValueError("高收入客户数量必须至少为 1")
     detail = normalize_and_validate(transactions)
     detail["net_revenue"] = detail["list_revenue"] - detail["discount"] - detail["returns"]
     detail["gross_profit"] = detail["net_revenue"] - detail["product_cost"]
@@ -23,7 +33,13 @@ def analyze_profitability(transactions: pd.DataFrame) -> ProfitabilityResult:
     customer["profit_rank"] = customer["contribution_profit"].rank(method="min", ascending=False).astype(int)
     customer["revenue_share"] = customer["net_revenue"] / customer["net_revenue"].sum()
     customer["cumulative_revenue_share"] = customer["revenue_share"].cumsum()
-    customer["profitability_flag"] = customer.apply(_flag, axis=1)
+    customer["profitability_flag"] = customer.apply(
+        _flag,
+        axis=1,
+        low_margin_threshold=low_margin_threshold,
+        high_value_threshold=high_value_threshold,
+        top_revenue_count=top_revenue_count,
+    )
     product = _summarize(detail, ["product"]).sort_values("contribution_profit", ascending=False).reset_index(drop=True)
     monthly = _summarize(detail, ["month"])
     profit_total = float(customer["contribution_profit"].sum())
@@ -40,11 +56,17 @@ def _summarize(frame: pd.DataFrame, keys: list[str]) -> pd.DataFrame:
 def _ratio(numerator: pd.Series, denominator: pd.Series) -> pd.Series:
     return numerator.div(denominator.where(denominator.ne(0))).fillna(0.0)
 
-def _flag(row: pd.Series) -> str:
+def _flag(
+    row: pd.Series,
+    *,
+    low_margin_threshold: float,
+    high_value_threshold: float,
+    top_revenue_count: int,
+) -> str:
     if row["contribution_profit"] < 0:
         return "负贡献"
-    if row["revenue_rank"] <= 2 and row["contribution_margin"] < 0.15:
+    if row["revenue_rank"] <= top_revenue_count and row["contribution_margin"] < low_margin_threshold:
         return "高收入低利润"
-    if row["contribution_margin"] >= 0.25:
+    if row["contribution_margin"] >= high_value_threshold:
         return "高价值"
     return "正常"
