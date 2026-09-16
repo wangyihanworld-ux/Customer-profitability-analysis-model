@@ -1,5 +1,7 @@
 # 客户与产品盈利能力分析模型
 
+[![tests](https://github.com/wangyihanworld-ux/Customer-profitability-analysis-model/actions/workflows/tests.yml/badge.svg)](https://github.com/wangyihanworld-ux/Customer-profitability-analysis-model/actions/workflows/tests.yml)
+
 这是作品集项目三，面向财务 BP、FP&A 与商业分析场景。项目将使用完全合成的数据，把销售收入逐层拆解为毛利和客户贡献利润，识别高收入低利润客户、产品组合变化、客户集中度与价格敏感性，并输出可复现的 Excel 管理报告。
 
 > 当前状态：项目已完成。合成数据、贡献利润分析、客户集中度、敏感性、一键 Excel 报告和自动化测试均已通过验收。
@@ -20,7 +22,7 @@
 - 贡献利润率 = 客户贡献利润 ÷ 净收入
 - 客户集中度使用 Top N 占比和 HHI 指标展示
 
-## 计划交付
+## 项目交付
 
 - 完全脱敏且可重复的客户、产品和交易合成数据
 - 输入校验与收入成本勾稽
@@ -37,7 +39,7 @@
 - 计算标价收入、净收入、毛利、贡献利润和贡献利润率；
 - 按客户、产品和月份汇总并保证各层级与交易明细勾稽；
 - 计算客户收入排名、利润排名、Top 1 收入占比和收入 HHI；
-- 识别高收入低利润客户，并公开 15% 的演示标签阈值；
+- 识别高收入低利润客户；演示默认阈值为 15%，也可通过 `low_margin_threshold` 参数调整；
 - 输出降价承压、基准和提价优化三种敏感性情景；
 - 一键生成合成输入工作簿和包含 8 张工作表的管理报告。
 
