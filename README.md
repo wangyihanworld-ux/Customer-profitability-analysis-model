@@ -1,5 +1,7 @@
 # 客户与产品盈利能力分析模型
 
+[English](README.en.md) · 中文
+
 [![tests](https://github.com/wangyihanworld-ux/Customer-profitability-analysis-model/actions/workflows/tests.yml/badge.svg)](https://github.com/wangyihanworld-ux/Customer-profitability-analysis-model/actions/workflows/tests.yml)
 
 这是作品集项目三，面向财务 BP、FP&A 与商业分析场景。项目将使用完全合成的数据，把销售收入逐层拆解为毛利和客户贡献利润，识别高收入低利润客户、产品组合变化、客户集中度与价格敏感性，并输出可复现的 Excel 管理报告。
@@ -75,7 +77,7 @@ customer-profitability-demo --output-dir .\my_demo_output
 python -m unittest discover -s tests -v
 ```
 
-当前 13 项测试覆盖合成数据可重复性、输入契约、利润瀑布勾稽、跨层级汇总、客户标签、HHI、情景方向和工作簿可重开。
+当前 15 项测试覆盖合成数据可重复性、输入契约、利润瀑布勾稽、跨层级汇总、客户标签、HHI、情景方向和工作簿可重开。
 
 详细口径见 [数据字典与业务口径](docs/data-dictionary.md)。
 
