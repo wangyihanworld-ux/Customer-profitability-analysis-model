@@ -9,3 +9,8 @@ deliverables/
 *.xlsx
 *.xls
 *.csv
+
+.pytest_cache/
+pytest-cache-files-*/
+
+!docs/allocation-evidence/*.csv

@@ -31,7 +31,8 @@ def analyze_profitability(
     customer = _summarize(detail, ["customer", "segment"]).sort_values("net_revenue", ascending=False).reset_index(drop=True)
     customer["revenue_rank"] = range(1, len(customer) + 1)
     customer["profit_rank"] = customer["contribution_profit"].rank(method="min", ascending=False).astype(int)
-    customer["revenue_share"] = customer["net_revenue"] / customer["net_revenue"].sum()
+    total_revenue = float(customer["net_revenue"].sum())
+    customer["revenue_share"] = customer["net_revenue"] / (total_revenue if total_revenue else float("nan"))
     customer["cumulative_revenue_share"] = customer["revenue_share"].cumsum()
     customer["profitability_flag"] = customer.apply(
         _flag,
@@ -43,7 +44,7 @@ def analyze_profitability(
     product = _summarize(detail, ["product"]).sort_values("contribution_profit", ascending=False).reset_index(drop=True)
     monthly = _summarize(detail, ["month"])
     profit_total = float(customer["contribution_profit"].sum())
-    metrics = {"list_revenue": float(detail["list_revenue"].sum()), "net_revenue": float(detail["net_revenue"].sum()), "gross_profit": float(detail["gross_profit"].sum()), "contribution_profit": profit_total, "contribution_margin": profit_total / float(detail["net_revenue"].sum()), "top_customer_revenue_share": float(customer.iloc[0]["revenue_share"]), "revenue_hhi": float((customer["revenue_share"] ** 2).sum()), "negative_customer_count": int((customer["contribution_profit"] < 0).sum())}
+    metrics = {"list_revenue": float(detail["list_revenue"].sum()), "net_revenue": float(detail["net_revenue"].sum()), "gross_profit": float(detail["gross_profit"].sum()), "contribution_profit": profit_total, "contribution_margin": profit_total / total_revenue if total_revenue else float("nan"), "top_customer_revenue_share": float(customer.iloc[0]["revenue_share"]), "revenue_hhi": float((customer["revenue_share"] ** 2).sum()) if total_revenue else float("nan"), "negative_customer_count": int((customer["contribution_profit"] < 0).sum())}
     return ProfitabilityResult(detail, customer, product, monthly, metrics)
 
 def _summarize(frame: pd.DataFrame, keys: list[str]) -> pd.DataFrame:
@@ -54,7 +55,7 @@ def _summarize(frame: pd.DataFrame, keys: list[str]) -> pd.DataFrame:
     return result
 
 def _ratio(numerator: pd.Series, denominator: pd.Series) -> pd.Series:
-    return numerator.div(denominator.where(denominator.ne(0))).fillna(0.0)
+    return numerator.div(denominator.where(denominator.ne(0)))
 
 def _flag(
     row: pd.Series,
@@ -69,4 +70,4 @@ def _flag(
         return "高收入低利润"
     if row["contribution_margin"] >= high_value_threshold:
         return "高价值"
-    return "正常"
+    return "未定义利润率" if pd.isna(row["contribution_margin"]) else "正常"

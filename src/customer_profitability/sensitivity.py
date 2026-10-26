@@ -1,5 +1,6 @@
 """Scenario sensitivity for contribution profit."""
 from __future__ import annotations
+import numpy as np
 import pandas as pd
 from .analysis import ProfitabilityResult
 
@@ -13,7 +14,7 @@ def run_sensitivity(result: ProfitabilityResult, scenarios: pd.DataFrame) -> pd.
         raise ValueError("情景名称不能为空或重复")
     frame = scenarios.copy()
     factors = frame[SCENARIO_COLUMNS[1:]].apply(pd.to_numeric, errors="coerce")
-    if factors.isna().any().any() or (factors <= -1).any().any():
+    if not np.isfinite(factors.to_numpy(float)).all() or (factors <= -1).any().any():
         raise ValueError("情景变化率必须是大于 -100% 的数字")
     frame[SCENARIO_COLUMNS[1:]] = factors
     rows = []
@@ -24,5 +25,5 @@ def run_sensitivity(result: ProfitabilityResult, scenarios: pd.DataFrame) -> pd.
         fulfillment = detail["fulfillment_cost"] * (1 + scenario.fulfillment_cost_change)
         service = detail["service_cost"] * (1 + scenario.service_cost_change)
         contribution = float((net_revenue - product_cost - fulfillment - service).sum())
-        rows.append({"scenario": scenario.scenario, "net_revenue": float(net_revenue.sum()), "contribution_profit": contribution, "contribution_margin": contribution / float(net_revenue.sum()), "change_vs_base": contribution - result.metrics["contribution_profit"]})
+        rows.append({"scenario": scenario.scenario, "net_revenue": float(net_revenue.sum()), "contribution_profit": contribution, "contribution_margin": contribution / float(net_revenue.sum()) if net_revenue.sum() else float("nan"), "change_vs_base": contribution - result.metrics["contribution_profit"]})
     return pd.DataFrame(rows)

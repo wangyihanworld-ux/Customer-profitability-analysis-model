@@ -1,5 +1,6 @@
 """Input contract for customer profitability analysis."""
 from __future__ import annotations
+import numpy as np
 import pandas as pd
 from .synthetic import KEY_COLUMNS
 
@@ -25,10 +26,12 @@ def normalize_and_validate(frame: pd.DataFrame) -> pd.DataFrame:
         raise DataValidationError("月份必须是有效日期")
     result["month"] = result["month"].dt.to_period("M").dt.to_timestamp()
     result[VALUE_COLUMNS] = result[VALUE_COLUMNS].apply(pd.to_numeric, errors="coerce")
-    if (result[VALUE_COLUMNS].isna() | (result[VALUE_COLUMNS] < 0)).any().any():
+    if (~np.isfinite(result[VALUE_COLUMNS]) | (result[VALUE_COLUMNS] < 0)).any().any():
         raise DataValidationError("数量和金额必须是非负数字")
     if result.duplicated(KEY_COLUMNS).any():
         raise DataValidationError("订单、客户和产品组合不能重复")
     if ((result["discount"] + result["returns"]) > result["list_revenue"]).any():
         raise DataValidationError("折扣与退货合计不能超过标价收入")
+    if (result.groupby("customer")["segment"].nunique() > 1).any():
+        raise DataValidationError("同一客户必须对应一个客户类型；请先统一分组口径")
     return result
