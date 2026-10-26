@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-26",
+  "tests": 24,
+  "subtests": 0,
+  "exit_code": 0,
+  "command": "python -m pytest -q --tb=short -p no:cacheprovider",
+  "tested_code_commit": "22ad3c6b95dbd0f9d5926f612d8e58e59ae2c3df",
+  "source_sha256": {
+    "tests\\test_allocation.py": "fd92c0b6c159d59f8f4751428e11a158ef3618a396c7686952e742d39fa19efa",
+    "tests\\test_edge_contracts.py": "8b0af52f3161076abb19d0b78ce1f1cdf1ab0638dc9cf7fe690ac1799acc6187",
+    "tests\\test_model.py": "c6f8b657b997f1a7cd3568f40d9f45c054fa46749f7b52e8c601cccdbe015021",
+    "src\\customer_profitability\\allocation.py": "5e0b79a49db660b43aa95bea532ebae619d625f607e5d0b3a2a4b4fd6a40a992",
+    "src\\customer_profitability\\analysis.py": "e0dcc0d05f5e494ac1ccc2e4e5273dcbb4f7fd08bc8665f866b78efa78291f47",
+    "src\\customer_profitability\\demo.py": "68fb3f2480e579e94f956706bbd89c6e4aceec0e9adc74fbcafe645093e4c9bc",
+    "src\\customer_profitability\\reporting.py": "f01b8a782659106a7855b9c83bb1840b91eb0f938876066339f536ff3c654648",
+    "src\\customer_profitability\\sensitivity.py": "b9082471937e5c4d8fce37fa83d6720a67abdfa2c50f01701cf9b834ee3ee022",
+    "src\\customer_profitability\\synthetic.py": "f53463c86aaf85c30a24f613da1de0cb9a9e36d602f7e08531c818273f000360",
+    "src\\customer_profitability\\validation.py": "38a87eaf78bf9c15773f2d347759eef97e93d9070e5444bd6c72f54bb2d5e305",
+    "src\\customer_profitability\\__init__.py": "e431ee0d73a6442a07806036dc45a6e887d058c7956e4d049e5535084c0581d1"
+  },
+  "validation": "AI-assisted local validation; not remote CI or user acceptance",
+  "environment": "Windows Python 3.14; project .testenv or .warehouse-env; worktree TEMP"
+}
