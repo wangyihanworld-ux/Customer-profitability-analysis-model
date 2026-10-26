@@ -14,3 +14,15 @@ deliverables/
 pytest-cache-files-*/
 
 !docs/allocation-evidence/*.csv
+
+# Local/private material must not be committed
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+/private/
+/application-materials*/
+/review-*/
+/privacy-audit-*/
+/resume*/
