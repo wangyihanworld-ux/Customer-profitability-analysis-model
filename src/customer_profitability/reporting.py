@@ -65,8 +65,9 @@ def _summary(ws, result: ProfitabilityResult) -> None:
     for row in (9,10): ws.cell(row,2).number_format='0.0%'
     ws.cell(11,2).number_format='0.0000'
     ws["D5"]="管理判断"; ws["D5"].fill=PatternFill("solid",fgColor=NAVY); ws["D5"].font=Font(color=WHITE,bold=True)
-    flagged=result.customer_summary.query("profitability_flag == '高收入低利润'").iloc[0]
-    notes=[f"{flagged['customer']}收入排名靠前，但贡献利润率仅为{flagged['contribution_margin']:.1%}。","客户价值判断应同时考虑折扣、退货、履约与服务成本。","敏感性结果是条件模拟，不是因果推断或业绩承诺。"]
+    flagged=result.customer_summary.query("profitability_flag == '高收入低利润'")
+    first_note = "当前阈值下无高收入低利润客户；未定义利润率不作正常客户判断。" if flagged.empty else f"{flagged.iloc[0]['customer']}收入排名靠前，但贡献利润率仅为{flagged.iloc[0]['contribution_margin']:.1%}。"
+    notes=[first_note,"客户价值判断应同时考虑折扣、退货、履约与服务成本。","敏感性结果是条件模拟，不是因果推断或业绩承诺。"]
     for i,note in enumerate(notes,6): ws.cell(i,4,note)
 
 def _write_frame(ws, frame: pd.DataFrame, start_row: int=1, table_name: str|None=None) -> None:
@@ -77,7 +78,7 @@ def _write_frame(ws, frame: pd.DataFrame, start_row: int=1, table_name: str|None
         for c,value in enumerate(row,1):
             if isinstance(value,pd.Timestamp): value=value.to_pydatetime()
             elif isinstance(value,Real) and not isinstance(value,bool): value=round(float(value),4)
-            ws.cell(r,c,value)
+            ws.cell(r,c,None if pd.isna(value) else value)
             header=str(export.columns[c-1])
             if "率" in header or "占比" in header: ws.cell(r,c).number_format="0.0%"
             elif any(word in header for word in ("收入","成本","利润","折扣","退货","金额","变化")): ws.cell(r,c).number_format='¥#,##0;[Red](¥#,##0);-'

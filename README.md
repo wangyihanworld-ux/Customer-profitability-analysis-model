@@ -77,7 +77,7 @@ customer-profitability-demo --output-dir .\my_demo_output
 python -m unittest discover -s tests -v
 ```
 
-当前 15 项测试覆盖合成数据可重复性、输入契约、利润瀑布勾稽、跨层级汇总、客户标签、HHI、情景方向和工作簿可重开。
+当前 21 项测试覆盖合成数据可重复性、输入契约、利润瀑布勾稽、跨层级汇总、客户标签、HHI、情景方向和工作簿可重开。
 
 详细口径见 [数据字典与业务口径](docs/data-dictionary.md)。
 
@@ -91,3 +91,12 @@ python -m unittest discover -s tests -v
 ## 数据安全
 
 公开仓库只使用程序生成的虚构客户、产品、价格、成本和交易数据，不引入任何真实公司或个人信息。
+
+## 2026-10-23 edge-case update
+
+Nonfinite inputs and conflicting customer segments are rejected. Zero-revenue margins and concentration are undefined (blank/NaN), not zero. Reports handle an empty high-revenue/low-margin group. Synthetic service-cost factors deliberately make some customers less profitable; this is not a discovery about actual customers. Cost allocation has not been validated against activity records, and price sensitivity assumes unchanged quantity, without elasticity or causal claims.
+
+
+## 2026年10月26日复核
+
+本轮新增功能、规则来源和适用限制见 [复核记录](docs/review-20261026.md)。实现与自动测试有AI辅助，不能代表本人独立编写、用户试用或企业采用。历史测试数属于当时版本，本轮结果见交付证据。
