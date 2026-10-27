@@ -1,5 +1,7 @@
 # 客户与产品盈利能力分析模型
 
+[运行与最新验证](docs/validation-latest.md)
+
 [English](README.en.md) · 中文
 
 [![tests](https://github.com/wangyihanworld-ux/Customer-profitability-analysis-model/actions/workflows/tests.yml/badge.svg)](https://github.com/wangyihanworld-ux/Customer-profitability-analysis-model/actions/workflows/tests.yml)
@@ -38,7 +40,6 @@
 - 客户分层、集中度、Pareto 与交叉补贴识别
 - 价格、成本和服务投入敏感性分析
 - 一键运行 Demo 与 Excel 管理报告
-- 自动化测试、公开文档、累计版简历和 STAR 面试手册
 
 ## 已实现
 

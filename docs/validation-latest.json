@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-27",
+  "tests": 24,
+  "subtests": 0,
+  "test_framework": "pytest",
+  "test_exit_code": 0,
+  "demo_exit_codes": {
+    "customer_profitability.demo": 0,
+    "customer_profitability.allocation": 0
+  },
+  "source_sha256_lf_normalized": {
+    "src/customer_profitability/__init__.py": "03a588e595f3c92a9b111e52067e878b08cffd47ebfa1d410bae311f32ab89e7",
+    "src/customer_profitability/allocation.py": "5e0b79a49db660b43aa95bea532ebae619d625f607e5d0b3a2a4b4fd6a40a992",
+    "src/customer_profitability/analysis.py": "496e1a5fed945b90a13807d6aaadc7aee018c31776d2b6c9137f0b0d6073d32b",
+    "src/customer_profitability/demo.py": "f90c806c59107d7185c030941dcef199d5dd8c9b7bfdb6cb8edd0f6716ec50d1",
+    "src/customer_profitability/reporting.py": "7349a0c88bf8fcd941d42fa503e3ffa7a90b16fb01e62c774e5ad0079b6c380a",
+    "src/customer_profitability/sensitivity.py": "cdf4357c91127688eb2ffac288e46eb66b76d74f691a3938622b9557ff4e8fa0",
+    "src/customer_profitability/synthetic.py": "c812f80aaa3bc26afb007d7c9a2a8bc111d6c00f22a2b2f120516b79ee6fcd70",
+    "src/customer_profitability/validation.py": "ce7ca45486e4efd6e9da4168950ed038f3a723ee0248faf6b4c5bde62230dfc7",
+    "tests/test_allocation.py": "fd92c0b6c159d59f8f4751428e11a158ef3618a396c7686952e742d39fa19efa",
+    "tests/test_edge_contracts.py": "8b0af52f3161076abb19d0b78ce1f1cdf1ab0638dc9cf7fe690ac1799acc6187",
+    "tests/test_model.py": "978b906fc3dfcac88d0bba585e3842b8046964b8195096dac67c5ede4ed8bc64"
+  },
+  "limits": "AI-assisted local verification; not evidence of deployment, user acceptance or business outcomes."
+}
